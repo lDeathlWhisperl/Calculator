@@ -178,7 +178,21 @@ Window
 
         Repeater
         {
-            model: ["()", "±", "%", "÷", "7", "8", "9", "×", "4", "5", "6", "-", "1", "2", "3", "+", "C", "0", ".", "="]
+            model:
+            [
+                "qrc:/icons/bkt.png",
+                "qrc:/icons/plus_minus.png",
+                "qrc:/icons/percent.png",
+                "qrc:/icons/division.png",
+                "7", "8", "9",
+                "qrc:/icons/multiplication.png",
+                "4", "5", "6",
+                "qrc:/icons/minus.png",
+                "1", "2", "3",
+                "qrc:/icons/plus.png",
+                "C", "0", ".",
+                "qrc:/icons/equal.png"
+            ]
 
             Button
             {
@@ -186,26 +200,25 @@ Window
                 width: height
                 id: btn
                 hoverEnabled: false
+
                 text: modelData
+                font.pixelSize: 24
+                font.letterSpacing: 1
+                font.family: openSansSemibold.name
+                palette.buttonText: (index === 16) ? "white" : "#024873"
 
-                contentItem: Text
-                {
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    text: btn.text
+                icon.source: modelData
+                icon.color: "white"
+                icon.height: 30
+                icon.width: 30
 
-                    font.pixelSize: 24
-                    font.letterSpacing: 1
-                    font.family: openSansSemibold.name
-
-                    lineHeight: 30
-                    color: (index % 4 === 3) || (index >= 0 && index <= 3) || (index === 16) ? "white" : "#024873"
-                }
+                display: (index % 4 === 3) || (index >= 0 && index <= 3) ? Button.IconOnly : Button.TextOnly
 
                 background: Rectangle
                 {
                     anchors.fill: parent
                     radius: 180
+
                     color:
                     {
                         var defColor = (index % 4 === 3) || (index >= 0 && index <= 3) ? "#0889A6" : "#B0D1D8";
@@ -226,21 +239,21 @@ Window
 
                 onPressed:
                 {
-                    if(btn.text !== "=") return
+                    if(btn.text !== "qrc:/icons/equal.png") return
 
                     start_time = Date.now()
                 }
                 onReleased:
                 {
-                    if(btn.text !== "=") return
+                    if(btn.text !== "qrc:/icons/equal.png") return
 
                     var end_time = Date.now();
                     duration = end_time - start_time;
                     duration /= 1000
                     console.log("Button was pressed for", duration, "seconds.");
 
-                    clear()
                     if(duration < 4) return
+                    clear()
                     start_time = Date.now()
                     secretPanel = true
                     console.log("Secret panel activated, enter password");
@@ -263,15 +276,19 @@ Window
                             input.font.pixelSize = 50
 
                         break;
-                    case "+":
-                    case "-":
-                    case "×":
-                    case "÷":
-                        equation.text += input.text + val
-                        input.text = ""
-
+                    case "qrc:/icons/plus.png":
+                        input.text += "+"
                         break;
-                    case "()":
+                    case "qrc:/icons/minus.png":
+                        input.text += "-"
+                        break;
+                    case "qrc:/icons/multiplication.png":
+                        input.text += "×"
+                        break;
+                    case "qrc:/icons/division.png":
+                        input.text += "÷"
+                        break;
+                    case "qrc:/icons/bkt.png":
                         isOpenBracket = !isOpenBracket
                         if(isOpenBracket)
                             input.text += "("
@@ -279,15 +296,14 @@ Window
                             input.text += ")"
 
                         break;
-                    case "%":
+                    case "qrc:/icons/percent.png":
                         input.text += "%"
                         break;
-                    case "±":
+                    case "qrc:/icons/plus_minus.png":
                         input.text += "-"
                         break;
-                    case "=":
+                    case "qrc:/icons/equal.png":
                         calc.isCompleted = true
-                        input.font.pixelSize = 50
                         equation.text += input.text
                         input.text = calc.solve(equation.text)
 
@@ -297,7 +313,7 @@ Window
                             input.font.pixelSize = 16
                         break;
                     default:
-                        input.text += btn.text
+                        input.text += val
 
                         str = input.text
 

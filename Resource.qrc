@@ -1,5 +1,13 @@
 <RCC>
     <qresource prefix="/">
         <file>fonts/Open Sans Semibold.ttf</file>
+        <file>icons/bkt.png</file>
+        <file>icons/division.png</file>
+        <file>icons/equal.png</file>
+        <file>icons/minus.png</file>
+        <file>icons/multiplication.png</file>
+        <file>icons/percent.png</file>
+        <file>icons/plus.png</file>
+        <file>icons/plus_minus.png</file>
     </qresource>
 </RCC>

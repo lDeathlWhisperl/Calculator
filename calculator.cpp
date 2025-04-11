@@ -1,5 +1,4 @@
 #include "calculator.h"
-#include <QStack>
 #include <QDebug>
 #include <QJSEngine>
 #include <QRegularExpression>
@@ -19,22 +18,25 @@ void preprocessExpression(QString &expression)
     }
 }
 
+void normalize(QString& exp)
+{
+    preprocessExpression(exp);
+    exp.replace("×", "*");
+    exp.replace("÷", "/");
+}
+
 QString Calculator::solve(QString eq)
 {
-    //normalization
-    preprocessExpression(eq);
-    for(size_t i = 0; i < eq.size(); ++i)
-        switch (eq[i].unicode()) {
-        case 0x00D7:
-            eq[i] = '*';
-            break;
-        case 0x00F7:
-            eq[i] = '/';
-            break;
-        }
+    if(eq.isEmpty()) return "0";
+    normalize(eq);
 
     QJSEngine engine;
     QString res = engine.evaluate(eq).toString();
+
+    QRegularExpression regex("[A-Za-z]+");
+
+    if (res == "Infinity") res = "∞";
+    else if(res.contains(regex)) res = "ERROR";
 
     return res;
 }
